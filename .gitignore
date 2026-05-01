@@ -4,3 +4,5 @@ npm-debug.log
 vars.env
 package-lock.json
 .dev/
+.github/
+trash/
