@@ -200,13 +200,26 @@ module.exports.redirect = function (req, res) {
 }
 
 module.exports.calc = function (req, res) {
-	if (req.body.eqn) {
-		res.render('app/calc', {
-			output: mathjs.eval(req.body.eqn)
-		})
-	} else {
-		res.render('app/calc', {
+	var eqn = req.body.eqn
+	if (!eqn) {
+		return res.render('app/calc', {
 			output: 'Enter a valid math string like (3+3)*2'
+		})
+	}
+	var regex = /^[0-9+\-*/().\s]+$/
+	if (!regex.test(eqn)) {
+		return res.render('app/calc', {
+			output: 'Invalid math expression'
+		})
+	}
+	try {
+		var result = mathjs.eval(eqn)
+		res.render('app/calc', {
+			output: result
+		})
+	} catch (err) {
+		res.render('app/calc', {
+			output: 'Invalid math expression'
 		})
 	}
 }
