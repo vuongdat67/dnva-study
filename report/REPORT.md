@@ -1,7 +1,5 @@
 # BÁO CÁO ĐỒ ÁN A12 – PENTEST VÀ BẢO MẬT DVNA
 
-> *Lưu ý: Vui lòng bổ sung thông tin cá nhân (họ tên, MSSV, lớp, GVHD) và thông tin triển khai thực tế (domain, IP, VPS) nếu cần nộp bản chính thức.*
-
 ---
 
 ## 1. Giới thiệu
