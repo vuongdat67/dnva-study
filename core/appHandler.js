@@ -1,21 +1,22 @@
 var db = require('../models')
 var bCrypt = require('bcrypt')
-const exec = require('child_process').exec;
+const execFile = require('child_process').execFile;
 var mathjs = require('mathjs')
 var libxmljs = require("libxmljs");
 var serialize = require("node-serialize")
 const Op = db.Sequelize.Op
 
 module.exports.userSearch = function (req, res) {
-	var query = "SELECT name,id FROM Users WHERE login='" + req.body.login + "'";
-	db.sequelize.query(query, {
-		model: db.User
+	db.User.findOne({
+		where: {
+			login: req.body.login
+		}
 	}).then(user => {
-		if (user.length) {
+		if (user) {
 			var output = {
 				user: {
-					name: user[0].name,
-					id: user[0].id
+					name: user.name,
+					id: user.id
 				}
 			}
 			res.render('app/usersearch', {
@@ -36,7 +37,7 @@ module.exports.userSearch = function (req, res) {
 }
 
 module.exports.ping = function (req, res) {
-	exec('ping -c 2 ' + req.body.address, function (err, stdout, stderr) {
+	execFile('ping', ['-c', '2', req.body.address], function (err, stdout, stderr) {
 		output = stdout + stderr
 		res.render('app/ping', {
 			output: output
