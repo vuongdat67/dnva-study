@@ -143,10 +143,17 @@ module.exports.userEdit = function (req, res) {
 }
 
 module.exports.userEditSubmit = function (req, res) {
-	db.User.find({
+	var targetUserId = parseInt(req.body.id, 10)
+	if (!Number.isInteger(targetUserId)) {
+		return res.status(400).send('Invalid user id')
+	}
+	if (req.user.role !== 'admin' && req.user.id !== targetUserId) {
+		return res.status(403).send('Forbidden')
+	}
+	db.User.findOne({
 		where: {
-			'id': req.body.id
-		}		
+			id: targetUserId
+		}
 	}).then(user =>{
 		if(req.body.password.length>0){
 			if(req.body.password.length>0){
@@ -176,7 +183,7 @@ module.exports.userEditSubmit = function (req, res) {
 		user.save().then(function () {
 			req.flash('success',"Updated successfully")
 			res.render('app/useredit', {
-				userId: req.body.id,
+				userId: targetUserId,
 				userEmail: req.body.email,
 				userName: req.body.name,
 			})
